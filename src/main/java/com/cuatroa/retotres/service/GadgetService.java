@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 /**
  * @author  Olga Patricia Bernal
  * @version 1.0
- * @since   2021-12-09
+ * @since   2021-12-14
  */
 @Service
 public class GadgetService {
@@ -85,5 +85,14 @@ public class GadgetService {
             return true;
         }).orElse(false);
         return aBoolean;
+    }
+    //Reto 5
+    public List<Gadget> gadgetsByPrice(double price) {
+        return gadgetRepository.gadgetsByPrice(price);
+    }
+
+    //Reto 5
+    public List<Gadget> findByDescriptionLike(String description) {
+        return gadgetRepository.findByDescriptionLike(description);
     }
 }

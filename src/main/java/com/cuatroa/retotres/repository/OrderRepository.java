@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 /**
  * @author  Olga Patricia Bernal
  * @version 1.0
- * @since   2021-12-09
+ * @since   2021-12-14
  */
 @Repository
 public class OrderRepository {
@@ -53,20 +53,21 @@ public class OrderRepository {
     public List<Order> findByZone(String zona) {
         return orderCrudRepository.findByZone(zona);
     }
-        
+    //Reto 4: Ordenes de un asesor por id.   
     public List<Order> ordersSalesManByID(Integer id) {
         Query query = new Query();
         
         Criteria criterio = Criteria.where("salesMan.id").is(id);
         query.addCriteria(criterio);
-        
         List<Order> orders = mongoTemplate.find(query, Order.class);
         
         return orders;
         
     }
-       
+    //Reto 4;Ordenes de un asesor x Fecha   
     public List<Order> ordersSalesManByState(String state, Integer id) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        
         Query query = new Query();
         Criteria criterio = Criteria.where("salesMan.id").is(id)
                             .and("status").is(state);
@@ -82,12 +83,12 @@ public class OrderRepository {
 	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         Query query = new Query();
         
-        Criteria dateCriteria = Criteria.where("registerDay")
+        Criteria criterio = Criteria.where("registerDay")
 			.gte(LocalDate.parse(dateStr, dtf).minusDays(1).atStartOfDay())
 			.lt(LocalDate.parse(dateStr, dtf).plusDays(1).atStartOfDay())
 			.and("salesMan.id").is(id);
         
-        query.addCriteria(dateCriteria);
+        query.addCriteria(criterio);
         
         List<Order> orders = mongoTemplate.find(query,Order.class);
         

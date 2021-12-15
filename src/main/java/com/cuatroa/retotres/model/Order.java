@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 /**
  * @author  Olga Patricia Bernal
  * @version 1.0
- * @since   2021-12-09
+ * @since   2021-12-14
  */
 @Document(collection = "orders")
 @Data

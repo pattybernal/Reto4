@@ -25,46 +25,71 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/user")
 @CrossOrigin("*")
+/**
+*Clase para UserController
+*/
 public class UserController {
 
     @Autowired
     private UserService userService;
 
     @GetMapping("/all")
+     /**
+     * Hacer llamados get
+     */
     public List<User> getAll() {
         return userService.getAll();
     }
-    
     @GetMapping("/{id}")
+    /**
+     * Hacer llamados get por id.
+     */
     public Optional <User> getUser(@PathVariable("id") int id) {
         return userService.getUser(id);
     }
 
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
+     /*
+     * peticion new (POST)
+     */
     public User create(@RequestBody User user) {
         return userService.create(user);
     }
-    
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.CREATED)
+    /**
+     * peticion update para actualizar (PUT)
+     */
     public User update(@RequestBody User user) {
         return userService.update(user);
     }
-
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    /**
+     * peticion update para borrar (DELETE)
+     */
     public boolean delete(@PathVariable("id") int id) {
         return userService.delete(id);
     }
     
     @GetMapping("/{email}/{password}")
+    /**
+     * Clase autenticar usuario
+     */
     public User authenticateUser(@PathVariable("email") String email, @PathVariable("password") String password) {
         return userService.authenticateUser(email, password);
     }
     
     @GetMapping("/emailexist/{email}")
+     /**
+     * clase verificar email
+     */
     public boolean emailExists(@PathVariable("email") String email) {
         return userService.emailExists(email);
+    }
+     @GetMapping("/birthday/{month}")
+    public List<User> birthtDayList(@PathVariable("month") String monthBirthtDay) {
+        return userService.birthtDayList(monthBirthtDay);
     }
 }

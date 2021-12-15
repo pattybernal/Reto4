@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author  Olga Patricia Bernal
  * @version 1.0
- * @since   2021-12-09
+ * @since   2021-12-14
  */
 @RestController
 @RequestMapping("/api/gadget")
@@ -56,5 +56,14 @@ public class GadgetController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public boolean delete(@PathVariable("id") int id) {
         return gadgetService.delete(id);
+    }
+    @GetMapping("/price/{price}")
+    public List<Gadget> gadgetsByPrice(@PathVariable("price") double precio) {
+        return gadgetService.gadgetsByPrice(precio);
+    }
+
+    @GetMapping("/description/{description}")
+    public List<Gadget> findByDescriptionLike(@PathVariable("description") String description) {
+        return gadgetService.findByDescriptionLike(description);
     }
 }

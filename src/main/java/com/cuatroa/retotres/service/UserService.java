@@ -2,46 +2,58 @@ package com.cuatroa.retotres.service;
 
 import com.cuatroa.retotres.model.User;
 import com.cuatroa.retotres.repository.UserRepository;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+
 
 /**
  * @author  Olga Patricia Bernal
  * @version 1.0
- * @since   2021-12-09
+ * @since   2021-12-14
  */
 @Service
 /**
- * *Clase para servicios de usuario*/
+*Clase para servicios de usuario
+*/
 public class UserService {
 
-    @Autowired
+  @Autowired
     private UserRepository userRepository;
-    /**
-     * Hacer llamados get
-     */
-    public List<User> getAll() {
-        return userRepository.getAll();
-    }
-    /**
-     * Hacer llamados get por Id
-     */
+    
     public Optional<User> getUser(int id) {
         return userRepository.getUser(id);
     }
-     /*
-     * peticion new (POST)
-     */
+
+    public List<User> getAll() {
+        return userRepository.getAll();
+    }
+
+    public boolean emailExists(String email) {
+        return userRepository.emailExists(email);
+    }
+
+     public User authenticateUser(String email, String password) {
+        Optional<User> usuario = userRepository.authenticateUser(email, password);
+        if (usuario.isEmpty()) {
+            return new User();
+        } else {
+            return usuario.get();
+        }
+    }
+
     public User create(User user) {
         
-        //obtiene el maximo id existente en la coleccion
-        Optional<User> userIdMaximo = userRepository.lastUserId();
+        Optional<User> userIdMaximo;
         
         //si el id del Usaurio que se recibe como parametro es nulo, entonces valida el maximo id existente en base de datos
         if (user.getId() == null) {
+            
+            //obtiene el maximo id existente en la coleccion
+            userIdMaximo = userRepository.lastUserId();
+            
             //valida el maximo id generado, si no hay ninguno aun el primer id sera 1
             if (userIdMaximo.isEmpty())
                 user.setId(1);
@@ -49,6 +61,8 @@ public class UserService {
             else
                 user.setId(userIdMaximo.get().getId() + 1);
         }
+        
+        //busca si en base de datos existe un documento cuyo id coincida con el que no enviarón en la peticiòn
         Optional<User> e = userRepository.getUser(user.getId());
         if (e.isEmpty()) {
             if (emailExists(user.getEmail())==false){
@@ -60,9 +74,7 @@ public class UserService {
             return user;
         }
     }
-    /**
-     * peticion update para actualizar (PUT)
-     */
+
     public User update(User user) {
 
         if (user.getId() != null) {
@@ -89,7 +101,7 @@ public class UserService {
                 if (user.getZone() != null) {
                     userDb.get().setZone(user.getZone());
                 }
-                
+
                 userRepository.update(userDb.get());
                 return userDb.get();
             } else {
@@ -99,31 +111,27 @@ public class UserService {
             return user;
         }
     }
-    /**
-     * peticion update para borrar (DELETE)
-     */
+
     public boolean delete(int userId) {
+        Optional<User> usuario = getUser(userId);
+        
+        if (usuario.isEmpty()){
+            return false;
+        }else{
+            userRepository.delete(usuario.get());
+            return true;
+        }
+        /*
         Boolean aBoolean = getUser(userId).map(user -> {
-            userRepository.delete(user);
+            repositorio.delete(user);
             return true;
         }).orElse(false);
         return aBoolean;
+
+        */
     }
-    /**
-     * clase verificar email
-     */
-    public boolean emailExists(String email) {
-        return userRepository.emailExists(email);
-    }
-    /**
-     * Clase autenticar usuario
-     */
-    public User authenticateUser(String email, String password) {
-        Optional<User> usuario = userRepository.authenticateUser(email, password);
-        if (usuario.isEmpty()) {
-            return new User();
-        } else {
-            return usuario.get();
-        }
+    
+    public List<User> birthtDayList(String monthBirthtDay) {
+        return userRepository.birthtDayList(monthBirthtDay);
     }
 }
