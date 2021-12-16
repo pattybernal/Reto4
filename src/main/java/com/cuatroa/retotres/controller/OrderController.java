@@ -42,14 +42,14 @@ public class OrderController {
 
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public Order create(@RequestBody Order gadget) {
-        return orderService.create(gadget);
+    public Order create(@RequestBody Order order) {
+        return orderService.create(order);
     }
 
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.CREATED)
-    public Order update(@RequestBody Order gadget) {
-        return orderService.update(gadget);
+    public Order update(@RequestBody Order order) {
+        return orderService.update(order);
     }
 
     @DeleteMapping("/{id}")
@@ -60,26 +60,26 @@ public class OrderController {
 
     //Reto 3:Ordenes de pedido asociadas a los asesores de una zona
     @GetMapping("/zona/{zona}")
-    public List<Order> findByZone(@PathVariable("zona") String zona) {
-        return orderService.findByZone(zona);
+    public List<Order> getZone(@PathVariable("zone") String zone) {
+        return orderService.getZone(zone);
     }
     
     //Métodos del reto 4
     //Reto 4: Ordenes de un asesor
     @GetMapping("/salesman/{id}")
-    public List<Order> ordersSalesManByID(@PathVariable("id") Integer id){
-        return orderService.ordersSalesManByID(id);
+    public List<Order> getBySalesManId(@PathVariable("id") Integer id){
+        return orderService.getBySalesManId(id);
     }
     
     //Reto 4: Ordenes de un asesor x Estado
-    @GetMapping("/state/{state}/{id}")
-    public List<Order> ordersSalesManByState(@PathVariable("state") String state, @PathVariable("id") Integer id){
-        return orderService.ordersSalesManByState(state, id);
+    @GetMapping("/state/{status}/{id}")
+    public List<Order> getByIdSalesManIdAndStatus(@PathVariable("id") Integer id,@PathVariable("status") String status){
+        return orderService.getBySalesManIdAndStatus(id, status);
     }
     
     //Reto 4: Ordenes de un asesor x fecha
-    @GetMapping("/date/{date}/{id}")
-    public List<Order> ordersSalesManByDate(@PathVariable("date") String dateStr, @PathVariable("id") Integer id) {
-        return orderService.ordersSalesManByDate(dateStr,id);
+    @GetMapping("/date/{registerDay}/{id}")
+    public List<Order> getByRegisterDayAndSalesManId(@PathVariable("registerDay") String registerDay, @PathVariable("id") Integer id){
+        return orderService.getByRegisterDayAndSalesManId(registerDay,id);
     }
 }

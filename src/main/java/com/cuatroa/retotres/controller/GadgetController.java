@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/gadget")
+//@RequestMapping("/api/gadget")
 @CrossOrigin("*")
 public class GadgetController {
 
@@ -58,12 +59,12 @@ public class GadgetController {
         return gadgetService.delete(id);
     }
     @GetMapping("/price/{price}")
-    public List<Gadget> gadgetsByPrice(@PathVariable("price") double precio) {
-        return gadgetService.gadgetsByPrice(precio);
+    public List<Gadget> gadgetsByPrice(@PathVariable("price") double price) {
+        return gadgetService.gadgetsByPrice(price);
     }
 
     @GetMapping("/description/{description}")
-    public List<Gadget> findByDescriptionLike(@PathVariable("description") String description) {
+    public List<Gadget> findByDescription(@PathVariable("description") String description) {
         return gadgetService.findByDescriptionLike(description);
     }
 }

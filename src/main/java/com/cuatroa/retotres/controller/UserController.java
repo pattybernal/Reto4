@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author  Olga Patricia Bernal
  * @version 1.0
- * @since   2021-12-09
+ * @since   2021-12-14
  */
 @RestController
 @RequestMapping("/api/user")
@@ -56,6 +56,7 @@ public class UserController {
     public User create(@RequestBody User user) {
         return userService.create(user);
     }
+    
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.CREATED)
     /**
@@ -64,6 +65,7 @@ public class UserController {
     public User update(@RequestBody User user) {
         return userService.update(user);
     }
+    
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     /**
@@ -88,8 +90,9 @@ public class UserController {
     public boolean emailExists(@PathVariable("email") String email) {
         return userService.emailExists(email);
     }
-     @GetMapping("/birthday/{month}")
-    public List<User> birthtDayList(@PathVariable("month") String monthBirthtDay) {
-        return userService.birthtDayList(monthBirthtDay);
+    
+    @GetMapping("/birthday/{birthday}")
+    public List <User> findByMonthBirthtDay(@PathVariable("birthday") String birthday){
+        return userService.findByMonthBirthtDay(birthday);
     }
 }

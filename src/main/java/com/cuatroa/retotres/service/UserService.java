@@ -46,31 +46,18 @@ public class UserService {
 
     public User create(User user) {
         
-        Optional<User> userIdMaximo;
-        
-        //si el id del Usaurio que se recibe como parametro es nulo, entonces valida el maximo id existente en base de datos
-        if (user.getId() == null) {
-            
-            //obtiene el maximo id existente en la coleccion
-            userIdMaximo = userRepository.lastUserId();
-            
-            //valida el maximo id generado, si no hay ninguno aun el primer id sera 1
-            if (userIdMaximo.isEmpty())
-                user.setId(1);
-            //si retorna informacion suma 1 al maximo id existente y lo asigna como el codigo del usuario
-            else
-                user.setId(userIdMaximo.get().getId() + 1);
-        }
-        
-        //busca si en base de datos existe un documento cuyo id coincida con el que no enviarón en la peticiòn
-        Optional<User> e = userRepository.getUser(user.getId());
-        if (e.isEmpty()) {
-            if (emailExists(user.getEmail())==false){
-                return userRepository.create(user);
-            }else{
+        if (user.getId() != null) {
+            Optional<User> usuario = userRepository.getUser(user.getId());
+            if (usuario.isEmpty()) {
+                if (userRepository.emailExists(user.getEmail()) == false) {
+                    return userRepository.create(user);
+                } else {
+                    return user;
+                }
+            } else {
                 return user;
             }
-        }else{
+        } else {
             return user;
         }
     }
@@ -112,26 +99,15 @@ public class UserService {
         }
     }
 
-    public boolean delete(int userId) {
-        Optional<User> usuario = getUser(userId);
-        
-        if (usuario.isEmpty()){
-            return false;
-        }else{
-            userRepository.delete(usuario.get());
-            return true;
-        }
-        /*
-        Boolean aBoolean = getUser(userId).map(user -> {
-            repositorio.delete(user);
+    public boolean delete(Integer id){
+        boolean usuario= getUser(id).map(user -> {
+            userRepository.delete(user);
             return true;
         }).orElse(false);
-        return aBoolean;
-
-        */
+        return usuario;
     }
     
-    public List<User> birthtDayList(String monthBirthtDay) {
-        return userRepository.birthtDayList(monthBirthtDay);
+    public List <User> findByMonthBirthtDay (String birthday){
+        return  userRepository.findByMonthBirthtDay(birthday);
     }
 }
